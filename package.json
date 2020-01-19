@@ -1,0 +1,17 @@
+{
+  "name": "schnupons",
+  "version": "1.0.0",
+  "description": "",
+  "bin": "./bin/cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^4.1.0",
+    "puppeteer": "^2.0.0",
+    "waait": "^1.0.5"
+  }
+}

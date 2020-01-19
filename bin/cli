@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const cli = require("commander");
+const app = require("../index");
+
+cli
+  .version("0.0.1")
+  .requiredOption("-u, --username <username>", "Your account username")
+  .requiredOption("-p, --password <password>", "Your account password")
+  .action(async cli => await app(cli.username, cli.pasword));
+
+cli.parseAsync(process.argv);
