@@ -7,6 +7,8 @@ cli
   .version("0.0.1")
   .requiredOption("-u, --username <username>", "Your account username")
   .requiredOption("-p, --password <password>", "Your account password")
-  .action(async cli => await app(cli.username, cli.pasword));
+  .action(async cli => {
+    await app(cli.username, cli.password);
+  });
 
 cli.parseAsync(process.argv);
