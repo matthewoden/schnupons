@@ -3,6 +3,8 @@ const puppeteer = require("puppeteer");
 
 const COUPONS_URL = "https://nourish.schnucks.com/app/coupons/home";
 const LOGIN_URL = "https://nourish.schnucks.com/app/sso/login";
+const COUPON_CLIP_URL =
+  "https://nourish.schnucks.com/app/coupons/api/users/authenticated/clipped";
 
 class Schnupons {
   constructor(options = {}) {
@@ -81,6 +83,9 @@ class Schnupons {
       const missed = await previous;
       try {
         await this.page.click(`#${id} button`);
+        if (shouldClip) {
+          await this.page.waitForResponse(COUPON_CLIP_URL);
+        }
       } catch (err) {
         missed.push(id);
       }
