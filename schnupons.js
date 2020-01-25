@@ -1,4 +1,4 @@
-const wait = require("waait");
+const agent = require("superagent");
 const puppeteer = require("puppeteer");
 
 const COUPONS_URL = "https://nourish.schnucks.com/app/coupons/home";
@@ -9,6 +9,8 @@ const COUPON_CLIP_URL =
 class Schnupons {
   constructor(options = {}) {
     const defaultOptions = {
+      timeout: 3600,
+      iftttEvent: "schnupons",
       headless: true,
       // human-like imperfection
       viewport: { width: 1507, height: 876 },
@@ -23,7 +25,17 @@ class Schnupons {
       ...options
     };
   }
+
   async init() {
+    if (this.options.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(async () => {
+        await this.dispatch(
+          `Schnupons Failure: Timeout of ${this.options.timeout} second(s) exceeded.`
+        );
+        process.exit(1);
+      }, this.options.timeout * 1000);
+    }
     this.browser = await puppeteer.launch({ headless: this.options.headless });
     this.page = await this.browser.newPage();
     await this.page.setViewport(this.options.viewport);
@@ -37,8 +49,8 @@ class Schnupons {
     await this.page.goto(LOGIN_URL, { waitUntil: "networkidle2" });
     await this.page.waitForSelector("form.login-form");
 
-    await this.page.type('input[type="message"]', username);
-    await this.page.type('input[type="password"]', password);
+    await this.page.type('input[type="message"]', this.options.username);
+    await this.page.type('input[type="password"]', this.options.password);
     await this.page.click(".login-form .btn");
 
     await this.page.waitForNavigation({ waitUntil: "networkidle2" });
@@ -56,7 +68,18 @@ class Schnupons {
     return this._toggleCoupons(false);
   }
 
+  async dispatch(message) {
+    if (this.options.iftttKey) {
+      console.info(`Dispatching to ${this.options.iftttEvent}`);
+      await agent.post(
+        `https://maker.ifttt.com/trigger/${this.options.iftttEvent}/with/key/${this.options.iftttKey}`,
+        { value1: message }
+      );
+    }
+  }
+
   async cleanup() {
+    clearTimeout(this.timeout);
     await this.browser.close();
     return this;
   }
