@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "schnupons-audit",
+    "files": [
+        {
+            "date": 1581376031105,
+            "name": "/Users/matthewoden/www/schnucks/log/schnupons-2020-02-10_17:07.log",
+            "hash": "1938c0f9773e137067e23c2a4f73f2ce"
+        }
+    ]
+}

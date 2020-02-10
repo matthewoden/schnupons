@@ -12,6 +12,8 @@
   "dependencies": {
     "commander": "^4.1.0",
     "puppeteer": "^2.0.0",
-    "superagent": "^5.2.1"
+    "superagent": "^5.2.1",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.4.2"
   }
 }

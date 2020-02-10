@@ -1,5 +1,6 @@
 const agent = require("superagent");
 const puppeteer = require("puppeteer");
+const logger = require("./logger");
 
 const COUPONS_URL = "https://nourish.schnucks.com/app/coupons/home";
 const LOGIN_URL = "https://nourish.schnucks.com/app/sso/login";
@@ -45,7 +46,7 @@ class Schnupons {
   }
 
   async login(username, password) {
-    console.log("Logging in.");
+    logger.info("Logging in.");
     await this.page.goto(LOGIN_URL, { waitUntil: "networkidle2" });
     await this.page.waitForSelector("form.login-form");
 
@@ -54,7 +55,7 @@ class Schnupons {
     await this.page.click(".login-form .btn");
 
     await this.page.waitForNavigation({ waitUntil: "networkidle2" });
-    console.log("Login successful.");
+    logger.info("Login successful.");
     return this;
   }
 
@@ -70,7 +71,7 @@ class Schnupons {
 
   async dispatch(message) {
     if (this.options.iftttKey) {
-      console.info(`Dispatching to ${this.options.iftttEvent}`);
+      logger.info(`Dispatching to ${this.options.iftttEvent}`);
       await agent.post(
         `https://maker.ifttt.com/trigger/${this.options.iftttEvent}/with/key/${this.options.iftttKey}`,
         { value1: message }
@@ -89,7 +90,7 @@ class Schnupons {
       ? { className: ".clipit", actionName: "Clipping" }
       : { className: ".unclipit", actionName: "Unclipping" };
 
-    console.log(`${action.actionName} coupons.`);
+    logger.info(`${action.actionName} coupons.`);
 
     await this.page.goto(COUPONS_URL, { waitUntil: "networkidle2" });
     await this.page.waitForSelector(action.className);
@@ -100,7 +101,7 @@ class Schnupons {
 
     // Attempting, because the buttons are always there, just not always active.
     // Not worth debugging schnuck's toggle states.
-    console.log(`Attempting to click on ${couponIds.length} coupons.`);
+    logger.info(`Attempting to click on ${couponIds.length} coupons.`);
 
     const missedClicks = await couponIds.reduce(async (previous, id) => {
       const missed = await previous;
@@ -115,7 +116,7 @@ class Schnupons {
       return missed;
     }, []);
 
-    console.log(
+    logger.info(
       `${action.actionName} complete. ${missedClicks.length} coupons skipped.`
     );
 

@@ -1,4 +1,5 @@
 const Schnupons = require("./schnupons");
+const logger = require("./logger");
 
 module.exports = async options => {
   const schnupons = new Schnupons({
@@ -14,8 +15,8 @@ module.exports = async options => {
     await schnupons.login();
     await schnupons.clipCoupons();
   } catch (err) {
-    console.warn("Schnupon clipping failure.");
-    console.error(err);
+    logger.warn("Schnupon clipping failure.");
+    logger.error(err);
     await schnupons.dispatch(err.message);
   } finally {
     schnupons.cleanup();
