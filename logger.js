@@ -7,7 +7,7 @@ const rotateTransport = new transports.DailyRotateFile({
   filename: "schnupons-%DATE%.log",
   auditFile: "./log/schnupons-audit.json",
   dirname: path.join(__dirname, "/log"),
-  datePattern: "YYYY-MM-DD_HH:mm",
+  datePattern: "YYYY-MM-DD",
   zippedArchive: false,
   maxSize: "1k",
   maxFiles: "14d"

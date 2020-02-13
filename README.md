@@ -47,15 +47,20 @@ Options:
 ## Example
 
 ```
-# in cron, in docker, or wherever
-schnupons \
-  --username $SCHNUPONS_USERNAME  \
-  --password $SCHNUPONS_PASSWORD  \
-  --timeout 3600  \
-  --iftttKey $IFTTT_WEBHOOK_KEY
+# in cron sourcing current user profile
+0 8 * * * bash -lc "schnupons --username $SCHNUPONS_USERNAME --password $SCHNUPONS_PASSWORD  --timeout 3600  --iftttKey $IFTTT_WEBHOOK_KEY"
 ```
 
 ## Troubleshooting
 
 On failure, there's an option to dispatch alerts to IFTTT, which you can send anywhere.
 Otherwise, the last 14 days of logs are kept in `./logs`
+
+## Tip
+
+If you're running locally on osx - use pmset to ensure cron jobs wake your machine:
+
+```bash
+# cron job runs at 8:00am, so let's wake a little early
+pmset repeat wakeorpoweron MTWRFSU 7:58:00
+```
